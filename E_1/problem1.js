@@ -23,7 +23,7 @@ function ForwardEuler(f, U_0, Delt, n) {
     u[0] = U_0;
     t[0] = 0;
     for (i = 1; i <= n; i++) {
-        u[i] = u[i - 1] + Delt * f(i * Delt, u[i - 1]);
+        u[i] = u[i - 1] + Delt * f((i-1) * Delt, u[i - 1]);
         t[i] = t[i - 1] + Delt;
     }
 
