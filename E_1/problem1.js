@@ -1,9 +1,13 @@
 // JavaScript source code
+//Please Change dt value, dt for more agreement with exact
 
-U0 = 0.2;                            //Initial Condition
-T = 20;                              //Solution for 0<=t<=20
-dt = 5;                              //Step size
-N = T / dt;                          //Number of steps to be performed
+
+U0 = 0.2;                            //Initial Condition                                (CAN BE TUNED)
+T = 20;                              //Solution for 0<=t<=20                            (CAN BE TUNED)
+dt = 5;                              //Step size                                        (OUGHT TO BE TUNED)
+N = T / dt;                          //Number of steps to be performed                  (CAN BE TUNED)
+
+N_exact = 20;                       //Number of points for exact equation               (CAN BE TUNED)
 
 let u = [];
 let t = [];
@@ -22,24 +26,23 @@ function ForwardEuler(f, U_0, Delt, n) {
         u[i] = u[i - 1] + Delt * f(i * Delt, u[i - 1]);
         t[i] = t[i - 1] + Delt;
     }
-    
+
 }
 
-function exact_fun(Tcap) {
-    for (i = 0; i <= 20; i++) {
-        u_exact[i] = 0.2 * exp(0.1 * i * Tcap / 20);
-        t_exact[i] = i * Tcap / 200;
-        document.write(i);
+function exact_fun(Tcap,n) {
+    for (i = 0; i <= n; i++) {
+        u_exact[i] = 0.2 * Math.exp(0.1 * i * Tcap / n);
+        t_exact[i] = i * Tcap / n;
     }
-    
+    //document.write(t_exact);
 }
 
-function main() {
+function main_F() {                                                                 //This is main function which will be running befor p5.js function
     ForwardEuler(f, U0, dt, N);
-    exact_fun(T);
+    exact_fun(T,N_exact);
 }
 
-main();
+main_F();
 
 
 
@@ -51,8 +54,8 @@ function setup() {
 
 function draw() {
     background(200);
-    let psx = 25;                                    // Plot scale used for x axis
-    let psy = 10;                                    // Plot scale used for y axis
+    let psx = 25;                                    // Plot scale used for x axis              (CAN BE TUNED)
+    let psy = 10;                                    // Plot scale used for y axis              (CAN BE TUNED)
 
     //---------------Axis----------------------
     stroke(0);
@@ -89,13 +92,27 @@ function draw() {
     stroke(0);
     strokeWeight(1);
 
-    for (i = 1; i <= 20; i++) {
+    for (i = 1; i <= N_exact; i++) {
         X1 = (t_exact[i - 1] + 1) * width / psx;
         Y1 = height - height / psy - u_exact[i - 1] * height / psy;
         X2 = (t_exact[i] + 1) * width / psx;
         Y2 = height - height / psy - u_exact[i] * height / psy;
         line(X1, Y1, X2, Y2);
-        
     }
 
+    //-------------------LEGEND--------------------------------
+    lpx = 5;                                           //Legend position x axis                    (CAN BE TUNED)
+    lpy = 10;                                           //Legend position y axis                    (CAN BE TUNED)
+    lplw = 5;                                           //Legend plotline width                     (CAN BE TUNED)
+    ld = 15;                                             //Legend distance                           (CAN BE TUNED)
+
+        //Exact Legend
+    stroke(0);
+    line(width - width / lpx - lplw, height / lpy, width - width / lpx + lplw, height / lpy);
+    text('Exact', width - width / lpx + 2 * lplw, height / lpy);
+        //Forward Euler legend
+    stroke('red');
+    line(width - width / lpx - lplw, height / lpy + ld, width - width / lpx + lplw, height / lpy + ld);
+    stroke(0);
+    text('ForwardEuler', width - width / lpx + 2 * lplw, height / lpy+ld);
 }
