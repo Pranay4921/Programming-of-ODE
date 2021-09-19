@@ -55,7 +55,7 @@ function setup() {
 function draw() {
     background(200);
     let psx = 25;                                    // Plot scale used for x axis              (CAN BE TUNED)
-    let psy = 10;                                    // Plot scale used for y axis              (CAN BE TUNED)
+    let psy = 5;                                    // Plot scale used for y axis              (CAN BE TUNED)
 
     //---------------Axis----------------------
     stroke(0);
